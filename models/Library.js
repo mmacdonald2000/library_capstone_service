@@ -8,6 +8,14 @@ var LibrarySchema = new mongoose.Schema({
   publishDate: Date,
   rating: Number,
 });
+
+LibrarySchema.index({
+  title: 'text',
+  author: 'text',
+  numberOfPages: 'text',
+  publishDate: 'text'
+});
+
 mongoose.model('Library', LibrarySchema);
 
 module.exports = mongoose.model('Library');

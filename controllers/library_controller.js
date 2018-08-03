@@ -42,6 +42,30 @@ router.get('/:id', function (req, res) {
  });
 });
 
+//returns search results from the Library
+router.get('/search/:searchParam', function (req, res) {
+ console.log('Searching...');
+ var search = req.params.searchParam;
+ var query = {$text: {$search: search }};
+ console.log(!isNaN(search));
+if(!isNaN(search)){
+   search = parseInt(search);
+   var start = parseInt(search) - 5;
+   end = parseInt(search + 5);
+   query = {$or: [
+     {numberOfPages: {$gt:(search - 50) , $lt: (search + 50)}},
+     {publishDate: {$gte: new Date(start, 0), $lte: new Date(end, 0)}}
+   ]};
+ }
+ console.log(search)
+ console.log(typeof search)
+ Library.find( query , function (err, books) {
+   if (err) return res.status(500).send("There was a problem finding books in library.");
+   res.status(200).send(books);
+   console.log("Got all search reuslts")
+ });
+});
+
 //Edits a book in the Library
 router.put('/:id', function (req, res) {
  console.log('Editing...');
