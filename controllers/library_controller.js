@@ -8,14 +8,8 @@ router.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
 
 // Create a new book in the library
 router.post('/', function (req, res) {
-  Library.create({
-    cover : req.body.cover,
-    title : req.body.title,
-    author : req.body.author,
-    numberOfPages : req.body.numberOfPages,
-    publishDate : req.body.publishDate,
-    rating: req.body.rating
-  },
+  Library.collection.insert(JSON.parse(req.body.books),
+
   function (err, book) {
     if (err) return res.status(500).send("There was a problem adding the information to the database.");
     res.status(200).send(book);
